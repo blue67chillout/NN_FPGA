@@ -18,13 +18,14 @@ module ctrl_unit #(
     output reg done
 );
 
-localparam  IDLE     = 6'b000000;
-localparam  COMPUTE  = 6'b000001;
-localparam  ACTIVATE = 6'b000010;
-localparam  LOAD     = 6'b000100;
-localparam  RESCALE  = 6'b001000;
-localparam  MAC_RST  = 6'b010000;
-localparam  PREDICT  = 6'b100000;
+localparam  IDLE     = 7'b0000000;
+localparam  COMPUTE  = 7'b0000001;
+localparam  ACTIVATE = 7'b0000010;
+localparam  LOAD     = 7'b0000100;
+localparam  RESCALE  = 7'b0001000;
+localparam  MAC_RST  = 7'b0010000;
+localparam  PREDICT  = 7'b0100000;
+localparam  DUMMY    = 7'b1000000;
 
 //integer i;
 
@@ -121,12 +122,15 @@ reg [$clog2(NO_HL+1)-1:0] layer;
                 if (!p_flag) begin
                     load_en = 0;
                     mac_rst = 1;
-                    NS = COMPUTE;
+                    NS = DUMMY;
                 end else if (p_flag) begin
                     mac_rst = 1;
                     load_en = 0;
                     NS = PREDICT;
                 end
+            end
+            DUMMY : begin
+                    NS = COMPUTE
             end
     
             PREDICT : begin
